@@ -1,5 +1,5 @@
 {
   "name": "visual-explainer-marketplace",
-  "description": "Plugin distribution for visual-explainer",
-  "version": "0.10.0"
+  "description": "Plugin distribution for visual-explainer and eds-site-designer",
+  "version": "0.10.0-eds.1"
 }

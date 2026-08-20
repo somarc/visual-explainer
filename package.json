@@ -1,15 +1,15 @@
 {
   "name": "visual-explainer",
-  "version": "0.10.0",
-  "description": "Agent skill that generates beautiful HTML pages for diagrams, diff reviews, plan reviews, slide decks, and data tables",
+  "version": "0.10.0-eds.1",
+  "description": "Visual Explainer plus an aesthetic-first AEM Edge Delivery Services site design skill",
   "license": "MIT",
-  "homepage": "https://github.com/nicobailon/visual-explainer#readme",
+  "homepage": "https://github.com/somarc/visual-explainer#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nicobailon/visual-explainer.git"
+    "url": "git+https://github.com/somarc/visual-explainer.git"
   },
   "bugs": {
-    "url": "https://github.com/nicobailon/visual-explainer/issues"
+    "url": "https://github.com/somarc/visual-explainer/issues"
   },
   "keywords": [
     "agent-skill",
@@ -27,6 +27,9 @@
     "diagrams",
     "html",
     "visualization",
+    "aem",
+    "edge-delivery-services",
+    "art-direction",
     "diff-review",
     "plan-review",
     "slides",
@@ -36,6 +39,7 @@
   ],
   "files": [
     "plugins/visual-explainer",
+    "plugins/eds-site-designer",
     ".claude-plugin",
     "configs",
     "install-pi.sh",
@@ -62,10 +66,12 @@
       "./plugins/visual-explainer/extension.ts"
     ],
     "skills": [
-      "./plugins/visual-explainer"
+      "./plugins/visual-explainer",
+      "./plugins/eds-site-designer"
     ],
     "prompts": [
-      "./plugins/visual-explainer/commands"
+      "./plugins/visual-explainer/commands",
+      "./plugins/eds-site-designer/commands"
     ],
     "image": "./banner.png"
   }

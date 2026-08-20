@@ -1,11 +1,11 @@
 {
   "name": "visual-explainer-marketplace",
   "owner": {
-    "name": "nicobailon"
+    "name": "somarc"
   },
   "metadata": {
-    "description": "Plugin distribution for visual-explainer",
-    "version": "0.10.0",
+    "description": "Plugin distribution for visual-explainer and eds-site-designer",
+    "version": "0.10.0-eds.1",
     "pluginRoot": "./plugins"
   },
   "plugins": [
@@ -17,7 +17,7 @@
       "author": {
         "name": "nicobailon"
       },
-      "repository": "https://github.com/nicobailon/visual-explainer",
+      "repository": "https://github.com/somarc/visual-explainer",
       "license": "MIT",
       "keywords": [
         "diagrams",
@@ -33,6 +33,32 @@
         "code-review",
         "slides",
         "mermaid"
+      ]
+    },
+    {
+      "name": "eds-site-designer",
+      "source": "./plugins/eds-site-designer",
+      "description": "Direct, lock, compile, and critique visually distinctive AEM Edge Delivery Services sites",
+      "version": "0.1.0",
+      "author": {
+        "name": "somarc"
+      },
+      "repository": "https://github.com/somarc/visual-explainer",
+      "license": "MIT",
+      "keywords": [
+        "aem",
+        "edge-delivery-services",
+        "web-design",
+        "art-direction",
+        "css"
+      ],
+      "category": "development",
+      "tags": [
+        "eds",
+        "aem",
+        "design-systems",
+        "frontend",
+        "visual-fidelity"
       ]
     }
   ]

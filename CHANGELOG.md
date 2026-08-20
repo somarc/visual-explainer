@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+- Added the `eds-site-designer` sibling skill for aesthetic-first AEM Edge Delivery Services design. It separates art direction, aesthetic lock, EDS compilation, and visual fidelity critique so production constraints do not flatten the idea before it exists.
+- Added EDS-specific aesthetic, authoring, CSS ownership, responsive, and fidelity contracts plus focused command and evaluation entry points.
+
+### Changed
+- Updated the fork marketplace and Pi package metadata to distribute both skills from `somarc/visual-explainer`; the existing native render tool, MCP server, and PPTX exporter remain scoped to `visual-explainer`.
+- Corrected the preserved `visual-explainer` plugin manifest from `0.9.0` to the checked-out upstream `0.10.0` version.
+
 ## [0.10.0] - 2026-08-20
 
 ### Highlights

@@ -1,0 +1,10 @@
+{
+  "name": "eds-site-designer",
+  "description": "Create visually distinctive AEM Edge Delivery Services sites by directing the aesthetic before compiling it into native EDS contracts",
+  "version": "0.1.0",
+  "author": {
+    "name": "somarc"
+  },
+  "repository": "https://github.com/somarc/visual-explainer",
+  "license": "MIT"
+}

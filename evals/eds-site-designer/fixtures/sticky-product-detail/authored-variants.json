@@ -1,0 +1,9 @@
+{
+  "variants": [
+    { "name": "long", "descriptionParagraphs": 5, "galleryImages": 1, "purchaseAction": true },
+    { "name": "short", "descriptionParagraphs": 1, "galleryImages": 1, "purchaseAction": true },
+    { "name": "missing-media", "descriptionParagraphs": 3, "galleryImages": 0, "purchaseAction": true },
+    { "name": "long-title", "descriptionParagraphs": 3, "galleryImages": 4, "purchaseAction": true },
+    { "name": "no-action", "descriptionParagraphs": 3, "galleryImages": 2, "purchaseAction": false }
+  ]
+}
