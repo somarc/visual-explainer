@@ -18,6 +18,31 @@ Ask your agent to explain a system architecture, review a diff, or compare requi
 
 https://github.com/user-attachments/assets/55ebc81b-8732-40f6-a4b1-7c3781aa96ec
 
+## EDS fork: create the idea before compiling it
+
+This fork adds **`eds-site-designer`**, an aesthetic-first design practice for Adobe Experience Manager Edge Delivery Services.
+
+EDS agents are already good at producing valid, authorable, performant sites. Correctness does not create taste. Visual Explainer produces stronger pages because it forms an aesthetic thesis—composition, typography, rhythm, color logic, hierarchy, and signature moments—before implementation.
+
+The EDS skill preserves that design intelligence, then translates the approved direction into native sections, blocks, authored content, and correctly owned CSS:
+
+```text
+visual-explainer   = design director
+EDS tooling        = compiler and runtime
+browser critique   = fidelity gate
+
+DIRECT -> LOCK -> COMPILE -> CRITIQUE
+```
+
+The two plugins remain separate:
+
+| Plugin | Purpose |
+|---|---|
+| `visual-explainer` | General-purpose visual explanations and self-contained HTML design plates |
+| `eds-site-designer` | Aesthetic direction, EDS authoring/ownership compilation, and rendered fidelity review |
+
+The design plate is a visual source of truth, not production source. Production remains native EDS code with explicit global, section, prose, and block ownership.
+
 ## Why
 
 Every coding agent defaults to ASCII art when you ask for a diagram. Box-drawing characters, monospace alignment hacks, text arrows. It works for trivial cases, but anything beyond a 3-box flowchart turns into an unreadable mess.
@@ -31,7 +56,8 @@ This skill fixes that. Real typography, dark/light themes, interactive Mermaid d
 | Harness | Support | Install path / behavior |
 |---|---|---|
 | Claude Code | Marketplace plugin | Preserved marketplace shape with source at `plugins/visual-explainer/` |
-| Pi | Package metadata plus installer | `package.json` advertises the skill, prompts, and native `visual_explainer` tool with `prepare` and `render` actions; `install-pi.sh` installs copied skill/prompt resources for legacy manual installs |
+| EDS Site Designer | Claude marketplace or Agent Skills directory | Install `plugins/eds-site-designer/`; use it alongside `visual-explainer` for design plates |
+| Pi | Multi-skill package metadata plus installer | `package.json` advertises both skills and their prompts plus the native `visual_explainer` design-plate tool; `install-pi.sh` remains a legacy visual-explainer-only installer |
 | MCP hosts | Local stdio MCP server | `visual-explainer-mcp` exposes render tools, prompt templates, and read-only skill resources without starting an HTTP server |
 | PPTX export | Best-effort static utility | `visual-explainer-pptx` converts simple HTML slide decks to `.pptx`; HTML remains the source of truth |
 | Antigravity CLI | Native Agent Skills path | Copy `plugins/visual-explainer/` to `~/.gemini/antigravity-cli/skills/visual-explainer` for global use or `.agents/skills/visual-explainer` for one workspace |
@@ -41,32 +67,44 @@ This skill fixes that. Real typography, dark/light themes, interactive Mermaid d
 | OpenClaw | Lightweight AGENTS/rules guidance | Use the supplied AGENTS guidance with the canonical skill directory |
 | VS Code Copilot / Copilot CLI | Custom instructions or rules guidance | Add the supplied AGENTS guidance to your supported workspace instruction or rules setup |
 
-**Claude Code (marketplace):**
+**Claude Code (this fork's marketplace):**
 ```shell
-/plugin marketplace add nicobailon/visual-explainer
+/plugin marketplace add somarc/visual-explainer
 /plugin install visual-explainer@visual-explainer-marketplace
+/plugin install eds-site-designer@visual-explainer-marketplace
 ```
 
-Note: Claude Code plugins namespace commands as `/visual-explainer:command-name`.
+Claude Code namespaces commands as `/visual-explainer:command-name` and `/eds-site-designer:command-name`.
+
+**Agent Skills directory:**
+
+```bash
+git clone https://github.com/somarc/visual-explainer.git ~/.agents/skill-sources/visual-explainer-eds
+ln -s ~/.agents/skill-sources/visual-explainer-eds/plugins/eds-site-designer ~/.agents/skills/eds-site-designer
+```
+
+Keep the existing `visual-explainer` skill installed, or link the fork's sibling plugin as well. MCP and PPTX remain capabilities of `visual-explainer`; `eds-site-designer` adds no separate runtime service.
+
+The initial EDS integration is supported through this fork's Claude marketplace, Pi package, and generic Agent Skills directory. The later Antigravity, Codex, OpenCode, Cursor, OpenClaw, and Copilot sections remain upstream `visual-explainer` guidance; they do not yet claim tested EDS-plugin adapters.
 
 **Pi:**
 ```bash
-pi install git:github.com/nicobailon/visual-explainer
+pi install git:github.com/somarc/visual-explainer
 ```
 
 Or from a local checkout:
 ```bash
-git clone --depth 1 https://github.com/nicobailon/visual-explainer.git
+git clone --depth 1 https://github.com/somarc/visual-explainer.git
 pi install ./visual-explainer
 ```
 
-The package manifest advertises the canonical skill, command templates, and Pi tool:
+The package manifest advertises both skills, their command templates, and the shared Pi visual-rendering tool:
 
 ```json
 "pi": {
   "extensions": ["./plugins/visual-explainer/extension.ts"],
-  "skills": ["./plugins/visual-explainer"],
-  "prompts": ["./plugins/visual-explainer/commands"],
+  "skills": ["./plugins/visual-explainer", "./plugins/eds-site-designer"],
+  "prompts": ["./plugins/visual-explainer/commands", "./plugins/eds-site-designer/commands"],
   "image": "./banner.png"
 }
 ```
@@ -188,6 +226,8 @@ Use `configs/copilot/AGENTS.md` as custom instructions or rules guidance. For VS
 
 ## Commands
 
+### Visual Explainer
+
 | Command | What it does |
 |---------|-------------|
 | `/generate-web-diagram` | Generate an HTML diagram for any topic |
@@ -199,6 +239,15 @@ Use `configs/copilot/AGENTS.md` as custom instructions or rules guidance. For VS
 | `/fact-check` | Verify accuracy of a document against actual code |
 
 The agent also kicks in automatically when it's about to dump a complex table in the terminal (4+ rows or 3+ columns) — it renders HTML instead.
+
+### EDS Site Designer
+
+| Command | What it does |
+|---------|-------------|
+| `/eds-site-designer:create-eds-direction` | Inspect the project, create a specific aesthetic direction and design plate, then stop for the lock |
+| `/eds-site-designer:model-eds-page` | Convert an approved direction into aesthetic invariants, authored contracts, and a CSS ownership ledger |
+| `/eds-site-designer:compile-eds-page` | Implement the locked direction as native, authorable EDS source |
+| `/eds-site-designer:review-eds-fidelity` | Compare the rendered page with the lock and report visual plus EDS integrity |
 
 ## Quick Mode
 
@@ -247,29 +296,27 @@ The picker is opt-in. Pages that don't ask for one still get a single palette an
 
 ```
 .claude-plugin/
-├── plugin.json           ← marketplace identity
-└── marketplace.json      ← plugin catalog
+├── plugin.json                 ← marketplace identity
+└── marketplace.json            ← sibling plugin catalog
 plugins/
-└── visual-explainer/
+├── visual-explainer/
+│   ├── .claude-plugin/
+│   │   └── plugin.json         ← plugin manifest
+│   ├── SKILL.md                ← workflow + design principles
+│   ├── extension.ts            ← Pi native tool
+│   ├── commands/               ← slash commands
+│   ├── quick/                  ← JSON schema + deterministic local renderer
+│   ├── mcp/                    ← local stdio MCP server
+│   ├── pptx/                   ← best-effort static PPTX exporter
+│   ├── references/             ← CSS, libraries, navigation, slides, themes
+│   └── templates/              ← architecture, diagram, table, slide references
+└── eds-site-designer/
     ├── .claude-plugin/
-    │   └── plugin.json   ← plugin manifest
-    ├── SKILL.md           ← workflow + design principles
-    ├── extension.ts       ← Pi native tool
-    ├── commands/          ← slash commands
-    ├── quick/             ← JSON schema + deterministic local renderer
-    ├── mcp/               ← local stdio MCP server
-    ├── pptx/              ← best-effort static PPTX exporter
-    ├── references/        ← agent reads before generating
-    │   ├── css-patterns.md   (layouts, animations, theming)
-    │   ├── libraries.md      (Mermaid, Chart.js, fonts)
-    │   ├── responsive-nav.md (sticky TOC for multi-section pages)
-    │   ├── slide-patterns.md (slide engine, transitions, presets)
-    │   └── themes.md          (11 palettes + runtime theme/font picker)
-    └── templates/         ← reference templates with different palettes
-        ├── architecture.html
-        ├── mermaid-flowchart.html
-        ├── data-table.html
-        └── slide-deck.html
+    │   └── plugin.json         ← sibling plugin manifest
+    ├── SKILL.md                ← direct → lock → compile → critique
+    ├── commands/               ← stage-specific entry points
+    ├── references/             ← aesthetic, authoring, ownership, responsive, fidelity models
+    └── templates/              ← contracts, ledger, and fidelity report
 ```
 
 **Output:** `~/.agent/diagrams/filename.html` → opens in browser. When you explicitly request AI-readable output or a source brief, the agent can also write `~/.agent/diagrams/filename.md` as a concise companion. It asks before replacing an existing companion. HTML remains the final visual output; the Markdown companion is not its source. In Pi package installs, agents can offer `visual_explainer` with `action: "prepare"` after generating or reviewing a substantial plan, architecture, diff, or implementation when a visual explanation would help, then call it with `action: "render"` as the final write/open step. MCP hosts use the separate `visual-explainer-mcp` stdio server and default render tools to `open: false`.
@@ -283,10 +330,12 @@ The skill routes to the right approach automatically: Mermaid for flowcharts and
 - All harnesses write visual output to `~/.agent/diagrams/` unless the user asks for a different path.
 - Switching OS theme requires a page refresh for Mermaid SVGs.
 - Results vary by model capability.
+- `eds-site-designer` can make aesthetic judgment more explicit and repeatable, but it does not replace human selection at the direction lock.
+- EDS design plates are prototypes; production output must still be compiled into the owning EDS repository layers.
 
 ## Credits
 
-Borrows ideas from [Anthropic's frontend-design skill](https://github.com/anthropics/skills) and [interface-design](https://github.com/Dammyjay93/interface-design).
+Forked from [nicobailon/visual-explainer](https://github.com/nicobailon/visual-explainer). The upstream skill borrows ideas from [Anthropic's frontend-design skill](https://github.com/anthropics/skills) and [interface-design](https://github.com/Dammyjay93/interface-design).
 
 ## License
 
